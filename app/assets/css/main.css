@@ -1,0 +1,14 @@
+:root {
+  --info: #1890ff;
+  --success: #52c41a;
+  --warning: #faad14;
+  --danger: #ff4d4f;
+}
+
+body {
+  font-family: 'Poppins', 'sans-serif';
+}
+
+.dark {
+  color-scheme: dark;
+}
