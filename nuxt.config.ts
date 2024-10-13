@@ -5,4 +5,5 @@ export default defineNuxtConfig({
   future: { compatibilityVersion: 4 },
   css: ['@unocss/reset/tailwind.css', '~/assets/css/main.css'],
   modules: ['@vueuse/nuxt', '@nuxt/icon', '@pinia/nuxt', '@unocss/nuxt', '@nuxt/fonts'],
+  extends: ['./layers/editor'],
 })
