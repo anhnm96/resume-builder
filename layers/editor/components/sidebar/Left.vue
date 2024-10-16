@@ -1,26 +1,14 @@
 <script lang="ts" setup>
+import { useResumeStore } from '../../stores/resume'
+
 const containterRef = ref<HTMLDivElement | null>(null)
 function scrollIntoView(selector: string) {
   const section = containterRef.value?.querySelector(selector)
   section?.scrollIntoView({ behavior: 'smooth' })
 }
 
-const sectionIcons = [
-  { id: 'basics', name: 'Basics', icon: 'ph:user' },
-  { id: 'summary', icon: 'ph:article' },
-  { id: 'profiles', icon: 'ph:share-network' },
-  { id: 'experience', icon: 'ph:briefcase' },
-  { id: 'education', icon: 'ph:graduation-cap' },
-  { id: 'skills', icon: 'ph:compass-tool' },
-  { id: 'languages', icon: 'ph:translate' },
-  { id: 'awards', icon: 'ph:medal' },
-  { id: 'certifications', icon: 'ph:certificate' },
-  { id: 'interests', icon: 'ph:game-controller' },
-  { id: 'projects', icon: 'ph:puzzle-piece' },
-  { id: 'publications', icon: 'ph:books' },
-  { id: 'volunteer', icon: 'ph:hand-heart' },
-  { id: 'references', icon: 'ph:users' },
-]
+const resumeStore = useResumeStore()
+const { sections } = storeToRefs(resumeStore)
 </script>
 
 <template>
@@ -35,13 +23,13 @@ const sectionIcons = [
 
       <div class="flex flex-col items-center justify-center gap-y-2">
         <SectionIcon
-          v-for="section in sectionIcons"
-          :id="section.id"
-          :key="section.id"
+          v-for="(section, id) in sections"
+          :id="id"
+          :key="id"
           :name="section.name"
           @click="scrollIntoView('#basics')"
         >
-          <Icon :name="section.icon" />
+          <Icon v-if="section.icon" :name="section.icon" />
         </SectionIcon>
         <!-- <SectionIcon
             id="custom"
@@ -68,6 +56,7 @@ const sectionIcons = [
         <Separator />
         <!-- <SummarySection /> -->
         <Separator />
+        <SidebarSectionBase id="profiles" :section="sections.profiles" :title="(item) => item.network" />
         <!-- <SectionBase<Profile>
             id="profiles"
             title={(item) => item.network}

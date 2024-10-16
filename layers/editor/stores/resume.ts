@@ -1,3 +1,5 @@
+import { defaultSections, type Sections } from '../schema/section'
+
 export const useResumeStore = defineStore('resume', () => {
   const basics = reactive({
     name: 'Minh Anh',
@@ -8,7 +10,7 @@ export const useResumeStore = defineStore('resume', () => {
     url: { label: '', href: '' },
     customFields: [],
     picture: {
-      url: '',
+      url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=100&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
       size: 64,
       aspectRatio: 1,
       borderRadius: 0,
@@ -20,29 +22,7 @@ export const useResumeStore = defineStore('resume', () => {
     },
   })
 
-  const defaultSection = {
-    name: '',
-    columns: 1,
-    separateLinks: true,
-    visible: true,
-  }
-
-  const sections = reactive({
-    summary: { ...defaultSection, id: 'summary', name: 'Summary', content: '' },
-    awards: { ...defaultSection, id: 'awards', name: 'Awards', items: [] },
-    certifications: { ...defaultSection, id: 'certifications', name: 'Certifications', items: [] },
-    education: { ...defaultSection, id: 'education', name: 'Education', items: [] },
-    experience: { ...defaultSection, id: 'experience', name: 'Experience', items: [] },
-    volunteer: { ...defaultSection, id: 'volunteer', name: 'Volunteering', items: [] },
-    interests: { ...defaultSection, id: 'interests', name: 'Interests', items: [] },
-    languages: { ...defaultSection, id: 'languages', name: 'Languages', items: [] },
-    profiles: { ...defaultSection, id: 'profiles', name: 'Profiles', items: [] },
-    projects: { ...defaultSection, id: 'projects', name: 'Projects', items: [] },
-    publications: { ...defaultSection, id: 'publications', name: 'Publications', items: [] },
-    references: { ...defaultSection, id: 'references', name: 'References', items: [] },
-    skills: { ...defaultSection, id: 'skills', name: 'Skills', items: [] },
-    custom: {},
-  })
+  const sections = reactive<Sections>({ ...defaultSections })
 
   return { basics, sections }
 })

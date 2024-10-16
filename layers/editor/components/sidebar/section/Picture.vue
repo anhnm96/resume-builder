@@ -37,29 +37,26 @@ function onAvatarClick() {
   <div class="flex items-center gap-x-4">
     <div class="group relative cursor-pointer" @click="onAvatarClick">
       <Avatar class="bg-secondary size-14">
-        <AvatarImage src="{picture.url}" />
+        <AvatarImage :src="basics.picture.url" />
       </Avatar>
 
-      {isValidUrl ? (
-      <div class="bg-background/30 pointer-events-none absolute inset-0 flex items-center justify-center rounded-full opacity-0 transition-opacity group-hover:opacity-100">
-        <Trash size="{16}" weight="bold" />
+      <div v-if="isValidUrl" class="bg-background/30 pointer-events-none absolute inset-0 flex items-center justify-center rounded-full opacity-0 transition-opacity group-hover:opacity-100">
+        <Icon name="ph:trash" />
       </div>
-      ) : (
-      <div class="bg-background/30 pointer-events-none absolute inset-0 flex items-center justify-center rounded-full opacity-0 transition-opacity group-hover:opacity-100">
-        <UploadSimple size="{16}" weight="bold" />
+      <div v-else class="bg-background/30 pointer-events-none absolute inset-0 flex items-center justify-center rounded-full opacity-0 transition-opacity group-hover:opacity-100">
+        <Icon name="ph:upload-simple" />
       </div>
-      )}
     </div>
 
     <div class="w-full flex flex-col gap-y-1.5">
-      <Label for="basics.picture.url">{t`Picture`}</Label>
+      <Label for="basics.picture.url">Picture</Label>
       <div class="flex items-center gap-x-2">
         <input ref="inputRef" hidden type="file" @change="onSelectImage">
 
         <Input
           id="basics.picture.url"
           placeholder="https://..."
-          :value="basics.picture.url"
+          :model-value="basics.picture.url"
           @change="test"
         />
 
@@ -70,7 +67,7 @@ function onAvatarClick() {
             </Button>
           </PopoverTrigger>
           <PopoverContent class="w-[360px]">
-            <PictureOptions />
+            <!-- <PictureOptions /> -->
           </PopoverContent>
         </Popover>
       </div>

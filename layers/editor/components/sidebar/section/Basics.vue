@@ -18,7 +18,7 @@ const { basics } = storeToRefs(resumeStore)
 
     <main class="grid gap-4 sm:grid-cols-2">
       <div class="sm:col-span-2">
-        <Picture />
+        <SidebarSectionPicture />
       </div>
 
       <div class="sm:col-span-2 space-y-1.5">
