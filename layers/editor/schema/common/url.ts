@@ -1,16 +1,17 @@
-import { z } from "zod";
+// import { z } from "zod";
+import * as z from 'valibot'
 
 // Schema
 export const urlSchema = z.object({
   label: z.string(),
-  href: z.literal("").or(z.string().url()),
-});
+  href: z.union([z.literal(''), z.pipe(z.string(), z.url())]),
+})
 
 // Type
-export type URL = z.infer<typeof urlSchema>;
+export type URL = z.InferOutput<typeof urlSchema>
 
 // Defaults
 export const defaultUrl: URL = {
-  label: "",
-  href: "",
-};
+  label: '',
+  href: '',
+}

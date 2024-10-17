@@ -1,19 +1,21 @@
-import { z } from "zod";
+// import { z } from 'zod'
+import * as z from 'valibot'
 
-import { defaultItem, itemSchema } from "../common";
+import { defaultItem, itemSchema } from '../common'
 
 // Schema
-export const interestSchema = itemSchema.extend({
-  name: z.string().min(1),
-  keywords: z.array(z.string()).default([]),
-});
+export const interestSchema = z.object({
+  ...itemSchema.entries,
+  name: z.pipe(z.string(), z.minLength(1)),
+  keywords: z.optional(z.array(z.string()), []),
+})
 
 // Type
-export type Interest = z.infer<typeof interestSchema>;
+export type Interest = z.InferOutput<typeof interestSchema>
 
 // Defaults
 export const defaultInterest: Interest = {
   ...defaultItem,
-  name: "",
+  name: '',
   keywords: [],
-};
+}

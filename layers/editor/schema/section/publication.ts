@@ -1,25 +1,27 @@
-import { z } from "zod";
+// import { z } from "zod";
+import * as z from 'valibot'
 
-import { defaultItem, defaultUrl, itemSchema, urlSchema } from "../common";
+import { defaultItem, defaultUrl, itemSchema, urlSchema } from '../common'
 
 // Schema
-export const publicationSchema = itemSchema.extend({
-  name: z.string().min(1),
+export const publicationSchema = z.object({
+  ...itemSchema.entries,
+  name: z.pipe(z.string(), z.minLength(1)),
   publisher: z.string(),
   date: z.string(),
   summary: z.string(),
   url: urlSchema,
-});
+})
 
 // Type
-export type Publication = z.infer<typeof publicationSchema>;
+export type Publication = z.InferOutput<typeof publicationSchema>
 
 // Defaults
 export const defaultPublication: Publication = {
   ...defaultItem,
-  name: "",
-  publisher: "",
-  date: "",
-  summary: "",
+  name: '',
+  publisher: '',
+  date: '',
+  summary: '',
   url: defaultUrl,
-};
+}

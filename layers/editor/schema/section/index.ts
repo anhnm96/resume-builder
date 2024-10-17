@@ -1,4 +1,5 @@
-import { z } from 'zod'
+// import { z } from 'zod'
+import * as z from 'valibot'
 import { idSchema } from '../common'
 import { awardSchema } from './award'
 import { certificationSchema } from './certification'
@@ -16,75 +17,89 @@ import { volunteerSchema } from './volunteer'
 
 export const sectionSchema = z.object({
   name: z.string(),
-  columns: z.number().min(1).max(5).default(1),
-  separateLinks: z.boolean().default(true),
-  visible: z.boolean().default(true),
-  icon: z.string().optional(),
+  columns: z.optional(z.pipe(z.number(), z.minValue(1), z.maxValue(5)), 1),
+  separateLinks: z.optional(z.boolean(), true),
+  visible: z.optional(z.boolean(), true),
+  icon: z.optional(z.string()),
 })
 
-export const customSchema = sectionSchema.extend({
+export const customSchema = z.object({
+  ...sectionSchema.entries,
   id: idSchema,
   items: z.array(customSectionSchema),
 })
 
 export const sectionsSchema = z.object({
-  summary: sectionSchema.extend({
+  summary: z.object({
+    ...sectionSchema.entries,
     id: z.literal('summary'),
-    content: z.string().default(''),
+    content: z.optional(z.string(), ''),
   }),
-  awards: sectionSchema.extend({
+  awards: z.object({
+    ...sectionSchema.entries,
     id: z.literal('awards'),
     items: z.array(awardSchema),
   }),
-  certifications: sectionSchema.extend({
+  certifications: z.object({
+    ...sectionSchema.entries,
     id: z.literal('certifications'),
     items: z.array(certificationSchema),
   }),
-  education: sectionSchema.extend({
+  education: z.object({
+    ...sectionSchema.entries,
     id: z.literal('education'),
     items: z.array(educationSchema),
   }),
-  experience: sectionSchema.extend({
+  experience: z.object({
+    ...sectionSchema.entries,
     id: z.literal('experience'),
     items: z.array(experienceSchema),
   }),
-  volunteer: sectionSchema.extend({
+  volunteer: z.object({
+    ...sectionSchema.entries,
     id: z.literal('volunteer'),
     items: z.array(volunteerSchema),
   }),
-  interests: sectionSchema.extend({
+  interests: z.object({
+    ...sectionSchema.entries,
     id: z.literal('interests'),
     items: z.array(interestSchema),
   }),
-  languages: sectionSchema.extend({
+  languages: z.object({
+    ...sectionSchema.entries,
     id: z.literal('languages'),
     items: z.array(languageSchema),
   }),
-  profiles: sectionSchema.extend({
+  profiles: z.object({
+    ...sectionSchema.entries,
     id: z.literal('profiles'),
     items: z.array(profileSchema),
   }),
-  projects: sectionSchema.extend({
+  projects: z.object({
+    ...sectionSchema.entries,
     id: z.literal('projects'),
     items: z.array(projectSchema),
   }),
-  publications: sectionSchema.extend({
+  publications: z.object({
+    ...sectionSchema.entries,
     id: z.literal('publications'),
     items: z.array(publicationSchema),
   }),
-  references: sectionSchema.extend({
+  references: z.object({
+    ...sectionSchema.entries,
     id: z.literal('references'),
     items: z.array(referenceSchema),
   }),
-  skills: sectionSchema.extend({
+  skills: z.object({
+    ...sectionSchema.entries,
     id: z.literal('skills'),
     items: z.array(skillSchema),
   }),
-  custom: z.record(z.string(), customSchema),
+  // custom: z.record(z.string(), customSchema),
 })
 
-export type Section = z.infer<typeof sectionSchema>
-export type Sections = z.infer<typeof sectionsSchema>
+export type Section = z.InferOutput<typeof sectionSchema>
+export type Sections = z.InferOutput<typeof sectionsSchema>
 
 export const defaultSection: Section = {
   name: '',
@@ -107,7 +122,9 @@ export const defaultSections: Sections = {
   publications: { ...defaultSection, id: 'publications', name: 'Publications', items: [], icon: 'ph:books' },
   volunteer: { ...defaultSection, id: 'volunteer', name: 'Volunteering', items: [], icon: 'ph:hand-heart' },
   references: { ...defaultSection, id: 'references', name: 'References', items: [], icon: 'ph:compass-tool' },
-  custom: {},
+  // custom: {},
 }
-export type SectionKey = keyof Sections
+
+export type SectionKey = keyof Omit<Sections, 'summary' | 'custom' >
+export type FullSectionKey = keyof Sections
 // export type SectionKey = 'basics' | keyof Sections | `custom.${string}`

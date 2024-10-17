@@ -1,11 +1,14 @@
 <script lang="ts" setup>
 import { useResumeStore } from '~~/layers/editor/stores/resume'
-import { z } from 'zod'
+import * as z from 'valibot'
 
 const resumeStore = useResumeStore()
 const { basics } = storeToRefs(resumeStore)
 
-const isValidUrl = computed(() => z.string().url().safeParse(basics.value.picture.url).success)
+const isValidUrl = computed(() => {
+  const schema = z.pipe(z.string(), z.url())
+  return z.safeParse(schema, basics.value.picture.url).success
+})
 function test(value: any) {
   console.log('value', value)
   // basics.picture.url =

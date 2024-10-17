@@ -1,23 +1,25 @@
-import { z } from "zod";
+// import { z } from "zod";
+import * as z from 'valibot'
 
-import { defaultItem, itemSchema } from "../common";
+import { defaultItem, itemSchema } from '../common'
 
 // Schema
-export const skillSchema = itemSchema.extend({
+export const skillSchema = z.object({
+  ...itemSchema.entries,
   name: z.string(),
   description: z.string(),
-  level: z.number().min(0).max(5).default(1),
-  keywords: z.array(z.string()).default([]),
-});
+  level: z.optional(z.pipe(z.number(), z.minValue(0), z.maxValue(5)), 1),
+  keywords: z.optional(z.array(z.string()), []),
+})
 
 // Type
-export type Skill = z.infer<typeof skillSchema>;
+export type Skill = z.InferOutput<typeof skillSchema>
 
 // Defaults
 export const defaultSkill: Skill = {
   ...defaultItem,
-  name: "",
-  description: "",
+  name: '',
+  description: '',
   level: 1,
   keywords: [],
-};
+}
