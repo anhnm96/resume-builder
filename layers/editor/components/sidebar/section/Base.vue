@@ -1,5 +1,6 @@
 <script lang="ts" setup generic="T extends Sections[SectionKey]">
 import type { SectionKey, Sections } from '~~/layers/editor/schema/section'
+import { useDialogStore } from '~~/layers/editor/stores/dialog'
 
 const props = defineProps<{
   id: SectionKey
@@ -8,25 +9,25 @@ const props = defineProps<{
   section: T
 }>()
 
-function open(action: string, payload: any) {
+const { open } = useDialogStore()
 
-}
 function onCreate() {
-  open('create', { id: props.id })
+  open(props.id, 'create', { id: props.id })
 }
 function onUpdate(item: T) {
-  open('update', { id: props.id, item })
+  open(props.id, 'update', { id: props.id, item })
 }
 function onDuplicate(item: T) {
-  open('duplicate', { id: props.id, item })
+  open(props.id, 'duplicate', { id: props.id, item })
 }
 function onDelete(item: T) {
-  open('delete', { id: props.id, item })
+  open(props.id, 'delete', { id: props.id, item })
 }
 
 function onToggleVisibility(index: number) {
   if ('items' in props.section) {
     const item = props.section.items[index]
+    if (!item) return
     item.visible = !item.visible
   }
 }
@@ -59,20 +60,18 @@ function onToggleVisibility(index: number) {
         on-drag-end="{onDragEnd}"
       > -->
       <!-- <SortableContext items="{section.items}" strategy="{verticalListSortingStrategy}"> -->
-      <template v-if="id !== 'summary'">
-        <SectionListItem
-          v-for="item in section.items"
-          :id="item.id"
-          :key="item.id"
-          :visible="item.visible"
-          :title="title(item)"
-          :description="description?.(item)"
-          @update="onUpdate(item)"
-          @delete="onDelete(item)"
-          @duplicate="onDuplicate(item)"
-          @toggle-visibility="onToggleVisibility"
-        />
-      </template>
+      <SidebarSectionItem
+        v-for="item in section.items"
+        :id="item.id"
+        :key="item.id"
+        :visible="item.visible"
+        :title="title(item as T)"
+        :description="description?.(item as T)"
+        @update="onUpdate(item as T)"
+        @delete="onDelete(item as T)"
+        @duplicate="onDuplicate(item as T)"
+        @toggle-visibility="onToggleVisibility"
+      />
       <!-- </SortableContext> -->
       <!-- </DndContext> -->
     </main>

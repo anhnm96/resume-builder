@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { SectionKey } from '../schema/section'
+import type { FullSectionKey } from '../schema/section'
 import { useResumeStore } from '../stores/resume'
 
 defineOptions({
@@ -7,7 +7,7 @@ defineOptions({
 })
 
 defineProps<{
-  id: SectionKey
+  id: FullSectionKey
   name?: string
 }>()
 
